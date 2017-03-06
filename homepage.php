@@ -117,24 +117,27 @@
 <?php
 
 
-$name=$email=$gender=$username=$number=$password=$confirmPassword=$nameErr=$emailErr=$genderErr=$usernameErr=$numberErr=$passwordErr=$confirmPasswordErr="";
-echo "jshdakjhd";
+$name=$email=$gender=$username1=$number=$password1=$confirmPassword=$nameErr=$emailErr=$genderErr=$usernameErr=$numberErr=$passwordErr=$confirmPasswordErr=""; 
 if($_SERVER["REQUEST_METHOD"] =="POST"){
-    echo "kjshdfjks"; 
- 
+      $name=input_data($_POST["name"]);
+      $username1 =input_data($_POST["username"]);
+      $gender=input_data($_POST["gender"]);
+      $email = input_data($_POST["email"]);
+      $password1 =input_data($_POST["password"]);
+
       function check_name(){
-         echo "Entered in checkname";
             if(empty($_POST["name"])){
-                   $nameErr="required field";
+                   $nameErr="required name ";
                    echo $nameErr;
             }else{
                    $name=input_data($_POST["name"]);
                    if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
-                         $nameErr = "Only letters and white space allowed";
+                         $nameErr = "Only letters and white space allowed ";
                          echo $nameErr;
                    }
                    else{
                        return 1; 
+                       echo  $name;
                    } 
             }
       }
@@ -142,11 +145,11 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
 
       function check_username(){
               if (empty($_POST["username"])) {
-                     $usernameErr = "required field";
+                     $usernameErr = "required username";
                      echo $usernameErr;
               } else {
-                    $username =input_data($_POST["username"]);
-                    if(strlen($username)<5||strlen($username)>20){
+                    $username1 =input_data($_POST["username"]);
+                    if(strlen($username1)<5||strlen($username1)>20){
                            $usernameErr="username should be between 5-20 char";
                            echo $usernameErr;
                     }
@@ -159,7 +162,7 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
 
      function check_email(){
           if (empty($_POST["email"])) {
-                $emailErr = "required field";
+                $emailErr = "required email";
                 echo $emailErr;
            } else {
                   $email = input_data($_POST["email"]);
@@ -174,26 +177,25 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
 
      function check_password(){
        if (empty($_POST["password"])) {
-             $passwordErr = "required field";
+             $passwordErr = "required password";
              echo $passwordErr;
        }else {
-                $password =input_data($_POST["password"]);
-                if(strlen($password)<5||strlen($password)>20){                                               $passwordErr="password should be between 5-20 char";
+                $password1 =input_data($_POST["password"]);
+                if(strlen($password1)<5||strlen($password1)>20){                                               $passwordErr="password should be between 5-20 char";
                        echo $passwordErr;
-                }else{                                                                                   return 1;                                                                          }
-       }
-     }
-
-     function confirm_password(){
+                  }
+                else{
         $confirmPassword=input_data($_POST["confirmPassword"]);
-        if($confirmPassword==$password){
+        echo "checking passwod";
+        if($confirmPassword==$password1){
             return 1;
          }else{
              $confirmPasswordErr="Passwords dont match";
              echo  $confirmPasswordErr;
          }
     }
-
+       }
+     }
     function check_gender(){
        if(empty($_POST["gender"])){
            $genderErr="gender required";
@@ -208,23 +210,21 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
     $checkUsername=check_username();
     $checkName=check_name();
     $checkPassword=check_password();
-    $confirmPassword=confirm_password();
     $checkGender=check_gender();
 
-     if($checkEmail && $checkUsername && $checkName && $checkPassword && $confirmPassword && $checkGender== 1){
-       $servername="192.168.121.187";
-       $username="first_year";
-       $password="first_year";
-       $database="first_year_db";
 
-       $conn= new mysqli($servername,$username,$password,$database);
+     if($checkEmail && $checkUsername && $checkName && $checkPassword  && $checkGender== 1){
+       echo "save values";
+       include 'gitIgnore.php';
+       echo "connection established ";
+
        if($conn->connect_error){
              die("connection failed: " .$conn-> connect_error);
        }
 
-       $sql="INSERT INTO rhea_signup(Email,Username,name,Password,Gender) VALUES ($email,$username,$name,$password,$gender)";
+       $sql="INSERT INTO rhea_signup(Email,Username,name,Password,Gender) VALUES ('$email', '$username1','$name','$password1','$gender')";
        if($conn->query($sql) === TRUE){
-             echo "SIGNUP SUCCESSFUL";
+             header('Location: login.php');
        } else {
              echo "error: " . $conn->error;
        }$conn->close();
@@ -265,7 +265,7 @@ function input_data($data){
     
 
 
-    <input type="text" name="Name" placeholder="Input field (Name)" class="div1" id="name" onchange="return errorName()" >
+    <input type="text" name="name" placeholder="Input field (Name)" class="div1" id="name" onchange="return errorName()" >
     <span class="error"> * </span>
     <br>
     <span class="error"> <?php echo $nameErr;?> </span>
@@ -296,8 +296,6 @@ function input_data($data){
      <span class="error"> <?php echo $genderErr;?></span>
      <br><br>
 
-
-    <label><input type="checkbox" id="checkbox"> I agree to terms and conditions</label>
     <br><br>
     <input type="Reset" value="Reset" class="button"> &emsp;
     <input type="Submit" value="Submit" class="button">
