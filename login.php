@@ -8,6 +8,7 @@
 <body class="background-color">
 
 <?php
+ session_start();
  $email_login=$password_login=$Error="";
  if($_SERVER ["REQUEST_METHOD"] == "POST"){
         $email_login=input_data($_POST["Email"]);
@@ -23,11 +24,10 @@
 
         if($count==1){
           $_SESSION['login_user']=$email_login;
-
-          echo "LOGIN SUCCESS";
+          header('Location: CommonFeedPage.php');
         }else{
            $Error="invalid email or password";
-         }
+        }
 
   }
 
@@ -42,7 +42,7 @@ function input_data($data){
 ?>
 
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"  align="center" class="form" onsubmit="return allChecks()">
+<form align="center" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"  class="form" onsubmit="return allChecks()">
     <p class="color fontsize1">
        <a class="color fontsize1 noUnderline" href="homepage.php"> Signup </a>
         Login 
