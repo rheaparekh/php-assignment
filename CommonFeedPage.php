@@ -24,8 +24,8 @@ function test_input($data) {
 
 <body>
    <h1> Feed Page  </h1>
-
-<form method="post" action="<?php echo htmlspecialchars($_SERVER ["PHP_SELF"]); ?>" align="center">
+    <a href="profile.php">  Profile  </a>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER ["PHP_SELF"]); ?>">
     Comment:
     <br>
     <textarea id="comment_user" name="comment_user" cols="100" rows="5"> </textarea>
