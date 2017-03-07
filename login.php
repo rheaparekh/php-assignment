@@ -9,24 +9,24 @@
 
 <?php
  session_start();
- $email_login=$password_login=$Error="";
+ $username_login=$password_login=$Error="";
  if($_SERVER ["REQUEST_METHOD"] == "POST"){
-        $email_login=input_data($_POST["Email"]);
+        $username_login=input_data($_POST["username1"]);
         $password_login=input_data($_POST["password1"]);
         include 'gitIgnore.php';
         echo "connection set up";
 
-        $sql="SELECT  ID FROM rhea_signup WHERE  Email='$email_login' and Password='$password_login' ";
+        $sql="SELECT  ID FROM rhea_signup WHERE  Username='$username_login' and Password='$password_login' ";
         $result =mysqli_query($conn,$sql);
         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
 
         $count= mysqli_num_rows($result);
 
         if($count==1){
-          $_SESSION['login_user']=$email_login;
-          header('Location: CommonFeedPage.php');
+          $_SESSION['login_user']=$username_login;
+          header('Location: CompleteProfile.php');
         }else{
-           $Error="invalid email or password";
+           $Error="invalid username or password";
         }
 
   }
@@ -49,7 +49,7 @@ function input_data($data){
     </p>
     <br><br>
 
-    <input type="text" name="Email" Placeholder="Input field (Email)" class="div1" id="Email" >
+    <input type="text" name="username1" Placeholder="Input field (username)" class="div1" id="username1" >
     <br>
     <span > <?php echo $Error; ?> </span>
     <br><br>

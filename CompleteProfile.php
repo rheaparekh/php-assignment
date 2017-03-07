@@ -8,9 +8,20 @@
 
 <?php 
   include 'session.php';
+  include 'gitIgnore.php';
   $branch=$college=$bio=$interests=$branchErr=$collegeErr=$bioErr=$interestsErr="" ;
 $username1=$_SESSION['login_user'];
-if($_SERVER["REQUEST_METHOD"] =="POST"){
+$sql="SELECT ProfileID FROM rhea_profile WHERE  username='$username1' ";
+
+$result =mysqli_query($conn,$sql);
+$row=mysqli_fetch_array($result,MYSQLI_ASSOC);
+
+$count= mysqli_num_rows($result);
+echo $count;
+if($count==1){
+    header('Location: CommonFeedPage.php');
+}else{
+   if($_SERVER["REQUEST_METHOD"] =="POST"){
       $branch=input_data($_POST["branch"]);
       $college=input_data($_POST["college"]);
       $bio=input_data($_POST["bio"]);
@@ -62,10 +73,10 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
       $checkInterests=check_interests();
 
       if($checkBranch && $checkCollege && $checkBio && $checkInterests ==1){
-         include 'gitIgnore.php';
          if($conn->connect_error){
            die("connection failed: " .$conn-> connect_error);
           }
+         
          $sql="INSERT INTO rhea_profile(branch,college,bio,interests,username) VALUES ('$branch','$college','$bio','$interests','$username1')";
          if($conn->query($sql) === TRUE){
             header('Location: CommonFeedPage.php');
@@ -73,6 +84,7 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
              echo "error: " . $conn->error;
          }$conn->close();
       }
+     }
  }
 
 function input_data($data){
@@ -114,3 +126,5 @@ function input_data($data){
 
 </p>
 </form>
+</body>
+</html>
