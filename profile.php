@@ -5,7 +5,7 @@
 </head>
 
 <?php 
-  $name=$gender=$email=$branch=$college=$bio=$interests="";
+  $name=$profilepic=$gender=$email=$branch=$college=$bio=$interests="";
   include 'gitIgnore.php';
   include 'session.php';
   $username1=$_SESSION['login_user'];
@@ -20,7 +20,7 @@
   }}
 
 
-  $sql1="SELECT branch,college,bio,interests FROM rhea_profile WHERE username='$username1' ";
+  $sql1="SELECT branch,college,bio,interests,image FROM rhea_profile WHERE username='$username1' ";
   $result2=$conn->query($sql1);
   if($result2->num_rows >0){
             while($row=$result2->fetch_assoc()){
@@ -28,10 +28,13 @@
                          $college=$row["college"];
                          $bio= $row["bio"];
                          $interests=$row["interests"];
+                         $profilepic=$row["image"];
             }}
 ?>
 
 <p> welcome to your profile </p>
+<img width=100px height=100px src="<?php echo $profilepic ?> ">
+<br>
 name : <?php echo $name; ?>
 <br>
 bio: <?php echo $bio;?>
@@ -47,7 +50,10 @@ Branch: <?php echo $branch; ?>
 Interests: <?php echo $interests; ?>
 <br>
 
-<a href="changePassword.php"> Change Password </a>
+<a href="changePassword.php"> Change Password </a> <br>
+<a href="CommonFeedPage.php"> Feed Page </a><br>
+<a href="Logout.php" > Logout </a><br>
+<a href="UpdateProfile.php"> Update Profile </a>
 </html>
  
 
