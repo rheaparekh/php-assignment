@@ -10,7 +10,7 @@
 <?php
  session_start();
  $username_login=$password_login=$Error="";
- if($_SERVER ["REQUEST_METHOD"] == "POST"){
+ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_login=input_data($_POST["username1"]);
         $password_login=input_data($_POST["password1"]);
         include 'gitIgnore.php';
