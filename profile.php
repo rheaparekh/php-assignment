@@ -47,6 +47,7 @@ Branch: <?php echo $branch; ?>
 Interests: <?php echo $interests; ?>
 <br>
 
+<a href="changePassword.php"> Change Password </a>
 </html>
  
 
