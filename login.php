@@ -9,19 +9,22 @@
 
 <?php
  session_start();
- if(isset($_COOKIE[$username_login])){
+ include 'gitIgnore.php';
+ if(isset($_COOKIE["randomkey"])){
       header('Location: CompleteProfile.php');
- }elseif(isset($_SESSION['login_user'])){
-     header('Location: CompleteProfile.php');
 }else{
  $username_login=$password_login=$Error="";
  if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_login=input_data($_POST["username1"]);
         $password_login=input_data($_POST["password1"]);
-        $remember_me=input_data($_POST["remember_me"]);
-        include 'gitIgnore.php';
- 
-        if($remember_me==true){
+
+        if (isset ($_POST["remember_me"])){
+          $rememberme=input_data($_POST["remember_me"]);
+        }else {
+          $rememberme=false;
+        }
+
+        if($rememberme==true){
           $cookie_name="randomkey";
           $cookie_value="key";
           setcookie($cookie_name,$cookie_value, time()+(86400*10),"/");
