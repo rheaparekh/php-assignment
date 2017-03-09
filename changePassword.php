@@ -8,7 +8,7 @@
  include 'session.php';
  include 'gitIgnore.php';
  include 'cookie.php';
- $saved_password=$entered_password=$new_password="";
+ $saved_password=$entered_password=$new_password1=$new_password2="";
  $username1=$_SESSION['login_user'];
 
  if($_SERVER["REQUEST_METHOD"] =="POST"){
@@ -20,14 +20,19 @@
         }
      }
      $entered_password=input_data($_POST["enteredPassword"]);
-     $new_password=input_data($_POST["newPassword"]);
-
-     if($entered_password==$saved_password){
-       $sql="UPDATE rhea_signup SET Password='$new_password' WHERE Username='$username1' ;";
-             if($conn->query($sql) === TRUE){
-                          echo "Password changed";
+     $new_password1=input_data($_POST["newPassword"]);
+     $new_password2=input_data($_POST["newPassword2"]);
+     $hashPassword=md5($new_password1); 
+     $hashEnteredPassword=md5($entered_password);
+     
+     if($new_password1==$new_password2){
+        if($hashEnteredPassword==$saved_password){
+           $sql="UPDATE rhea_signup SET Password='$hashPassword' WHERE Username='$username1' ;";
+                if($conn->query($sql) === TRUE){
+                           echo "Password changed";
              }
-      }
+         }
+     }
  } 
 
  
@@ -48,6 +53,8 @@ function input_data($data){
     <br><br>
     <input type="password" name="newPassword" id="newPassword" Placeholder="Enter New Password">
     
+    <br><br>
+    <input type="password" name="newPassword2" id="newPassword2" Placeholder="confirm Password">
 
     <br><br>
     <input type="Submit" value="Submit">

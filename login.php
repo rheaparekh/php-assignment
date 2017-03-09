@@ -17,6 +17,7 @@
  if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_login=input_data($_POST["username1"]);
         $password_login=input_data($_POST["password1"]);
+        $hashPassword=md5($password_login);
 
         if (isset ($_POST["remember_me"])){
           $rememberme=input_data($_POST["remember_me"]);
@@ -30,7 +31,7 @@
           setcookie($cookie_name,$cookie_value, time()+(86400*10),"/");
         } 
 
-        $sql="SELECT  ID FROM rhea_signup WHERE  Username='$username_login' and Password='$password_login' ";
+        $sql="SELECT  ID FROM rhea_signup WHERE  Username='$username_login' and Password='$hashPassword' ";
         $result =mysqli_query($conn,$sql);
         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
 

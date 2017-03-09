@@ -112,19 +112,41 @@
     }
 </script>
 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" >
+      $(document).ready(function(){
+              var x_timer;
+              $("#username1").keyup(function (e){
+                     clearTimeout(x_timer);
+                     var user_name =$(this).val();
+                     x_timer=setTimeout(function(){
+                                check_username_ajax(user_name);
+                     },1000);
+               });
+       function check_username_ajax(username1){
+             $("#user_result").html('<img src="http://www.drivethrurpg.com/shared_images/ajax-loader.gif" />');
+             $.post('username_checker.php',{'user_name':username1},function(data){
+             $("#user_result").html(data);
+             });
+        }
+    });
 
+
+
+</script>
 
 <?php
 
 
-$name=$email=$gender=$username1=$number=$password1=$confirmPassword=$nameErr=$emailErr=$genderErr=$usernameErr=$numberErr=$passwordErr=$confirmPasswordErr=""; 
+$name=$email=$gender=$username1=$number=$password1=$confirmPassword=$hashPassword=$nameErr=$emailErr=$genderErr=$usernameErr=$numberErr=$passwordErr=$confirmPasswordErr=""; 
 if($_SERVER["REQUEST_METHOD"] =="POST"){
       $name=input_data($_POST["name"]);
-      $username1 =input_data($_POST["username"]);
+      $username1 =input_data($_POST["username1"]);
       $gender=input_data($_POST["gender"]);
       $email = input_data($_POST["email"]);
       $password1 =input_data($_POST["password"]);
-
+      
+      
       function check_name(){
             if(empty($_POST["name"])){
                    $nameErr="required name ";
@@ -144,11 +166,11 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
 
 
       function check_username(){
-              if (empty($_POST["username"])) {
+              if (empty($_POST["username1"])) {
                      $usernameErr = "required username";
                      echo $usernameErr;
               } else {
-                    $username1 =input_data($_POST["username"]);
+                    $username1 =input_data($_POST["username1"]);
                     if(strlen($username1)<5||strlen($username1)>20){
                            $usernameErr="username should be between 5-20 char";
                            echo $usernameErr;
@@ -186,7 +208,6 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
                   }
                 else{
         $confirmPassword=input_data($_POST["confirmPassword"]);
-        echo "checking passwod";
         if($confirmPassword==$password1){
             return 1;
          }else{
@@ -196,6 +217,7 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
     }
        }
      }
+          
     function check_gender(){
        if(empty($_POST["gender"])){
            $genderErr="gender required";
@@ -205,24 +227,24 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
             return 1;
          }
      }
-    
+
+
     $checkEmail=check_email();
     $checkUsername=check_username();
     $checkName=check_name();
     $checkPassword=check_password();
     $checkGender=check_gender();
-
+     
+    $hashPassword=md5($password1);
 
      if($checkEmail && $checkUsername && $checkName && $checkPassword  && $checkGender== 1){
-       echo "save values";
        include 'gitIgnore.php';
-       echo "connection established ";
 
        if($conn->connect_error){
              die("connection failed: " .$conn-> connect_error);
        }
 
-       $sql="INSERT INTO rhea_signup(Email,Username,name,Password,Gender) VALUES ('$email', '$username1','$name','$password1','$gender')";
+       $sql="INSERT INTO rhea_signup(Email,Username,name,Password,Gender) VALUES ('$email', '$username1','$name','$hashPassword','$gender')";
        if($conn->query($sql) === TRUE){
              header('Location: login.php');
        } else {
@@ -242,7 +264,7 @@ function input_data($data){
 ?>
 
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" align="center" class="form" onsubmit="return allChecks()">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" align="center" class="form">
     <p class="color fontsize1"> Signup 
        <a class="color  fontsize1 noUnderline" href="login.php"> Login </a>
     </p>
@@ -250,29 +272,29 @@ function input_data($data){
     <p><span class="error"> *required field </span> </p>
     <br> <br>
 
-    <input type="text" name="email" Placeholder="Input field (Email)" class="div1" id="email" onchange=" return errorEmail()" >
+    <input type="text" name="email" Placeholder="Input field (Email)" class="div1" id="email"  >
     <span class="error"> * </span>
     <br>
     <span class="error"> <?php echo $emailErr ;?></span>
     <br><br>
 
 
-    <input type="text" name="username" Placeholder="Input field(username)" class="div1" id="username" onchange="return errorUserName()" >
+    <input type="text" name="username1" Placeholder="Input field(username)" class="div1" id="username1"  >
     <span class="error"> * </span>
     <br>
-    <span class="error"> <?php echo $usernameErr;?> </span>
+    <span class="error"name="user_result" id="user_result"> <?php echo $usernameErr;?> </span>
     <br><br>
     
 
 
-    <input type="text" name="name" placeholder="Input field (Name)" class="div1" id="name" onchange="return errorName()" >
+    <input type="text" name="name" placeholder="Input field (Name)" class="div1" id="name" >
     <span class="error"> * </span>
     <br>
     <span class="error"> <?php echo $nameErr;?> </span>
     <br><br>
 
 
-    <input type="password" name="password" maxlength="11" placeholder="Input field (Password)" class="div1"  id="textPassword" onchange="return errorPassword(false)">
+    <input type="password" name="password" maxlength="11" placeholder="Input field (Password)" class="div1"  id="textPassword" >
     <span class="error"> * </span>
     <br>
     <span class="error"> <?php echo $passwordErr;?> </span>
@@ -280,7 +302,7 @@ function input_data($data){
 
 
 
-    <input type="password" name="confirmPassword" placeholder="Confirm Password" class="div1" id="confirmPassword" onchange="return errorPassword(true)" >
+    <input type="password" name="confirmPassword" placeholder="Confirm Password" class="div1" id="confirmPassword"  >
     <span class="error">*</span>
     <br>
     <span class="error"> <?php echo $confirmPasswordErr;?> </span>
