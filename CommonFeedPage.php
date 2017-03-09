@@ -5,6 +5,7 @@
 </head>
 <?php
 include 'session.php';
+include 'cookie.php';
 $comment=$username1=$timeStamp="";
 $username1=$_SESSION['login_user'];
 
