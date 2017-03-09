@@ -7,6 +7,7 @@
 <?php
  include 'session.php';
  include 'gitIgnore.php';
+ include 'cookie.php';
  $saved_password=$entered_password=$new_password="";
  $username1=$_SESSION['login_user'];
 

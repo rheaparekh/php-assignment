@@ -9,12 +9,23 @@
 
 <?php
  session_start();
+ if(isset($_COOKIE[$username_login])){
+      header('Location: CompleteProfile.php');
+ }elseif(isset($_SESSION['login_user'])){
+     header('Location: CompleteProfile.php');
+}else{
  $username_login=$password_login=$Error="";
  if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_login=input_data($_POST["username1"]);
         $password_login=input_data($_POST["password1"]);
+        $remember_me=input_data($_POST["remember_me"]);
         include 'gitIgnore.php';
-        echo "connection set up";
+ 
+        if($remember_me==true){
+          $cookie_name="randomkey";
+          $cookie_value="key";
+          setcookie($cookie_name,$cookie_value, time()+(86400*10),"/");
+        } 
 
         $sql="SELECT  ID FROM rhea_signup WHERE  Username='$username_login' and Password='$password_login' ";
         $result =mysqli_query($conn,$sql);
@@ -28,8 +39,8 @@
         }else{
            $Error="invalid username or password";
         }
-
   }
+}
 
 function input_data($data){
     $data=trim($data);
@@ -57,7 +68,7 @@ function input_data($data){
     <input type="password" name="password1" maxlength="11" placeholder="Input field (Password)" class="div1"  id="textPassword">
     <br><br>
 
-    <label><input type="checkbox" id="checkbox" > Remember me</label>
+    <label><input type="checkbox" id="remember_me" name="remember_me" > Remember me</label>
 
     <br><br>
     <input type="Reset" value="Reset" class="button"> &emsp;

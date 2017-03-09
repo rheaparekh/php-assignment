@@ -7,6 +7,7 @@
 <?php 
   $name=$profilepic=$gender=$email=$branch=$college=$bio=$interests="";
   include 'gitIgnore.php';
+  include 'cookie.php' ;
   include 'session.php';
   $username1=$_SESSION['login_user'];
   

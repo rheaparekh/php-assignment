@@ -6,6 +6,7 @@
 
 <?php 
    include 'session.php';
+   include 'cookie.php' ;
    include 'gitIgnore.php';
 
    $name=$profilepic=$gender=$email=$branch=$college=$bio=$interests="";

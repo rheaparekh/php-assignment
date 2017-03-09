@@ -8,6 +8,7 @@
 
 <?php 
 include 'session.php';
+include 'cookie.php';
 include 'gitIgnore.php';
 $branch=$college=$bio=$interests=$branchErr=$collegeErr=$bioErr=$interestsErr="" ;
 $username1=$_SESSION['login_user'];
