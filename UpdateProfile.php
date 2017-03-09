@@ -69,20 +69,28 @@
              }
         }
 
-        $sql1="UPDATE rhea_signup SET name='$inputName',Email='$inputEmail' WHERE Username='$username1' ";
-        $sql2="UPDATE rhea_profile SET branch='$inputBranch',bio='$inputBio',interests='$inputInterests',image='$target_file' WHERE username='$username1' ";
-        if($conn->query($sql1)===TRUE and $conn->query($sql2)===TRUE){
-              echo "Profile Updated Successfully";
+        if($uploadOk==1){
+            $sql1="UPDATE rhea_signup SET name='$inputName',Email='$inputEmail' WHERE Username='$username1' ";
+            $sql2="UPDATE rhea_profile SET branch='$inputBranch',bio='$inputBio',interests='$inputInterests',image='$target_file' WHERE username='$username1' ";
+            if($conn->query($sql1)===TRUE and $conn->query($sql2)===TRUE){
+                echo "Profile Updated Successfully";
              }
-     }
-    
+         }else{
+           $sql1="UPDATE rhea_signup SET name='$inputName',Email='$inputEmail' WHERE Username='$username1' ";
+           $sql2="UPDATE rhea_profile SET branch='$inputBranch',bio='$inputBio',interests='$inputInterests' WHERE username='$username1' ";
+           if($conn->query($sql1)===TRUE and $conn->query($sql2)===TRUE){
+                      echo "Profile Updated Successfully";
+            }
+         }
+}
+
+
 function input_data($data){
        $data=trim($data);
        $data=stripslashes($data);
        $data=htmlspecialchars($data);
        return $data;
 }
-
 
  ?>
 <h2> Update Profile </h2>
@@ -103,8 +111,8 @@ function input_data($data){
      <textarea rows="6" cols="50" name="interests" id="interests"> <?php echo $interests?>
      </textarea>
      <br><br>
-     Change Profile picture:<br>
-     <input type="file" name="profilepic" id="profilepic"><br><br>
+     Change Profile picture:<br><?php echo $profilepic?><br>
+     <input type="file" name="profilepic" id="profilepic" value="<?php echo $profilepic?>"><br><br>
      <input type="submit" value="submit">
 </form>
 <a href="profile.php" > Profile </a>

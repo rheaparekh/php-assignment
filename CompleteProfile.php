@@ -102,7 +102,7 @@ if($count==1){
     $checkBio=check_bio();
     $checkInterests=check_interests();
 
-    if($checkBranch && $checkCollege && $checkBio && $checkInterests ==1){
+    if($checkBranch && $checkCollege && $checkBio && $checkInterests && $uploadOk ==1 ){
        if($conn->connect_error){
            die("connection failed: " .$conn-> connect_error);
           }
