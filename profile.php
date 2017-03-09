@@ -7,8 +7,8 @@
 <?php 
   $name=$profilepic=$gender=$email=$branch=$college=$bio=$interests="";
   include 'gitIgnore.php';
-  include 'cookie.php' ;
-  include 'session.php';
+  include 'session.php' ;
+  include 'cookie.php';
   $username1=$_SESSION['login_user'];
   
   $sql="SELECT name,Gender,Email FROM rhea_signup WHERE Username='$username1' ";
