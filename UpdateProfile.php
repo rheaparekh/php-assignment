@@ -81,6 +81,11 @@
            $sql2="UPDATE rhea_profile SET branch='$inputBranch',bio='$inputBio',interests='$inputInterests' WHERE username='$username1' ";
            if($conn->query($sql1)===TRUE and $conn->query($sql2)===TRUE){
                       echo "Profile Updated Successfully";
+                         $email=$inputEmail;
+                         $name=$inputName;
+                         $branch=$inputBranch;
+                         $bio=$inputBio;
+                         $interests=$inputInterests;
             }
          }
 }
