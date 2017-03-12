@@ -1,3 +1,126 @@
+
+<?php
+$name=$email=$gender=$username1=$number=$password1=$confirmPassword=$hashPassword=$nameErr=$emailErr=$genderErr=$usernameErr=$numberErr=$passwordErr=$confirmPasswordErr=""; 
+if($_SERVER["REQUEST_METHOD"] =="POST"){
+      $name=input_data($_POST["name"]);
+      $username1 =input_data($_POST["username1"]);
+      $gender=input_data($_POST["gender"]);
+      $email = input_data($_POST["email"]);
+      $password1 =input_data($_POST["password"]);
+
+      function check_name(){
+            if(empty($_POST["name"])){
+                   $nameErr="required name ";
+                   echo $nameErr;
+            }else{
+                   $name=input_data($_POST["name"]);
+                   if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+                         $nameErr = "Only letters and white space allowed in name ";
+                         echo $nameErr;
+                   }
+                   else{
+                       return 1; 
+                   } 
+            }
+      }
+
+
+      function check_username(){
+              if (empty($_POST["username1"])) {
+                     $usernameErr = "required username";
+                     echo $usernameErr;
+              } else {
+                    $username1 =input_data($_POST["username1"]);
+                    if(strlen($username1)<5||strlen($username1)>20){
+                           $usernameErr="username should be between 5-20 char";
+                           echo $usernameErr;
+                    }
+                    else{
+                      return 1;
+                    }
+              }
+      }
+
+
+     function check_email(){
+          if (empty($_POST["email"])) {
+                $emailErr = "required email";
+                echo $emailErr;
+           } else {
+                  $email = input_data($_POST["email"]);
+                  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                         $emailErr = "Invalid email format";
+                         echo $emailErr;
+                  }else{
+                    return 1;
+                  }
+            }
+      }
+
+     function check_password(){
+       if (empty($_POST["password"])) {
+             $passwordErr = "required password";
+             echo $passwordErr;
+       }else {
+                $password1 =input_data($_POST["password"]);
+                if(strlen($password1)<5||strlen($password1)>20){                                               $passwordErr="password should be between 5-20 char";
+                       echo $passwordErr;
+                  }
+                else{
+        $confirmPassword=input_data($_POST["confirmPassword"]);
+        if($confirmPassword==$password1){
+            return 1;
+         }else{
+             $confirmPasswordErr="Passwords dont match";
+             echo  $confirmPasswordErr;
+         }
+    }
+       }
+     }
+          
+    function check_gender(){
+       if(empty($_POST["gender"])){
+           $genderErr="gender required";
+           echo $genderErr;
+        }else{
+            $gender=input_data($_POST["gender"]);
+            return 1;
+         }
+     }
+
+
+    $checkEmail=check_email();
+    $checkUsername=check_username();
+    $checkName=check_name();
+    $checkPassword=check_password();
+    $checkGender=check_gender();
+     
+    $hashPassword=md5($password1);
+
+     if($checkEmail && $checkUsername && $checkName && $checkPassword  && $checkGender== 1){
+       include 'gitIgnore.php';
+
+       if($conn->connect_error){
+             die("connection failed: " .$conn-> connect_error);
+       }
+
+       $sql="INSERT INTO rhea_signup(Email,Username,name,Password,Gender) VALUES ('$email', '$username1','$name','$hashPassword','$gender')";
+       if($conn->query($sql) === TRUE){
+             header('Location: login.php');
+       } else {
+             echo "error: " . $conn->error;
+       }$conn->close();
+    }
+}
+
+function input_data($data){
+     $data=trim($data);
+     $data=stripslashes($data);
+     $data=htmlspecialchars($data);
+     return $data;
+} 
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -134,136 +257,6 @@
 
 
 </script>
-
-<?php
-
-
-$name=$email=$gender=$username1=$number=$password1=$confirmPassword=$hashPassword=$nameErr=$emailErr=$genderErr=$usernameErr=$numberErr=$passwordErr=$confirmPasswordErr=""; 
-if($_SERVER["REQUEST_METHOD"] =="POST"){
-      $name=input_data($_POST["name"]);
-      $username1 =input_data($_POST["username1"]);
-      $gender=input_data($_POST["gender"]);
-      $email = input_data($_POST["email"]);
-      $password1 =input_data($_POST["password"]);
-      
-      
-      function check_name(){
-            if(empty($_POST["name"])){
-                   $nameErr="required name ";
-                   echo $nameErr;
-            }else{
-                   $name=input_data($_POST["name"]);
-                   if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
-                         $nameErr = "Only letters and white space allowed ";
-                         echo $nameErr;
-                   }
-                   else{
-                       return 1; 
-                       echo  $name;
-                   } 
-            }
-      }
-
-
-      function check_username(){
-              if (empty($_POST["username1"])) {
-                     $usernameErr = "required username";
-                     echo $usernameErr;
-              } else {
-                    $username1 =input_data($_POST["username1"]);
-                    if(strlen($username1)<5||strlen($username1)>20){
-                           $usernameErr="username should be between 5-20 char";
-                           echo $usernameErr;
-                    }
-                    else{
-                      return 1;
-                    }
-              }
-      }
-
-
-     function check_email(){
-          if (empty($_POST["email"])) {
-                $emailErr = "required email";
-                echo $emailErr;
-           } else {
-                  $email = input_data($_POST["email"]);
-                  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                         $emailErr = "Invalid email format";
-                         echo $emailErr;
-                  }else{
-                    return 1;
-                  }
-            }
-      }
-
-     function check_password(){
-       if (empty($_POST["password"])) {
-             $passwordErr = "required password";
-             echo $passwordErr;
-       }else {
-                $password1 =input_data($_POST["password"]);
-                if(strlen($password1)<5||strlen($password1)>20){                                               $passwordErr="password should be between 5-20 char";
-                       echo $passwordErr;
-                  }
-                else{
-        $confirmPassword=input_data($_POST["confirmPassword"]);
-        if($confirmPassword==$password1){
-            return 1;
-         }else{
-             $confirmPasswordErr="Passwords dont match";
-             echo  $confirmPasswordErr;
-         }
-    }
-       }
-     }
-          
-    function check_gender(){
-       if(empty($_POST["gender"])){
-           $genderErr="gender required";
-           echo $genderErr;
-        }else{
-            $gender=input_data($_POST["gender"]);
-            return 1;
-         }
-     }
-
-
-    $checkEmail=check_email();
-    $checkUsername=check_username();
-    $checkName=check_name();
-    $checkPassword=check_password();
-    $checkGender=check_gender();
-     
-    $hashPassword=md5($password1);
-
-     if($checkEmail && $checkUsername && $checkName && $checkPassword  && $checkGender== 1){
-       include 'gitIgnore.php';
-
-       if($conn->connect_error){
-             die("connection failed: " .$conn-> connect_error);
-       }
-
-       $sql="INSERT INTO rhea_signup(Email,Username,name,Password,Gender) VALUES ('$email', '$username1','$name','$hashPassword','$gender')";
-       if($conn->query($sql) === TRUE){
-             header('Location: login.php');
-       } else {
-             echo "error: " . $conn->error;
-       }$conn->close();
-    }
-}
-
-function input_data($data){
-     $data=trim($data);
-     $data=stripslashes($data);
-     $data=htmlspecialchars($data);
-     return $data;
-}
-
-
-?>
-
-
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" align="center" class="form">
     <p class="color fontsize1"> Signup 
        <a class="color  fontsize1 noUnderline" href="login.php"> Login </a>
