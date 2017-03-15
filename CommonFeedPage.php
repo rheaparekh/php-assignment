@@ -7,8 +7,17 @@
 include 'session.php';
 include 'cookie.php';
 $comment=$username1=$timeStamp="";
+$cookie_value=$_COOKIE['randomkey'];
 $username1=$_SESSION['login_user'];
-
+if($username1==NULL){
+   $sql2="SELECT from rhea_signup Username  WHERE cookies=$cookie_value";
+   $result2=$conn->query($sql2);
+   if($result2->num_rows >0){
+         while($row=$result2->fetch_assoc()){
+              $username1=$row["Username"];
+         }
+   }
+}
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     include 'gitIgnore.php';
     $comment= test_input($_POST["comment_user"]);

@@ -10,8 +10,17 @@
  include 'cookie.php';
  $saved_password=$entered_password=$new_password1=$new_password2="";
  $username1=$_SESSION['login_user'];
+ if($username1==NULL){
+      $sql2="SELECT from rhea_signup Username  WHERE cookies=$cookie_value";
+      $result2=$conn->query($sql2);
+      if($result2->num_rows >0){
+              while($row=$result2->fetch_assoc()){
+                  $username1=$row["Username"];
+              }
+       }
+}
 
- if($_SERVER["REQUEST_METHOD"] =="POST"){
+if($_SERVER["REQUEST_METHOD"] =="POST"){
      $sql="SELECT Password FROM rhea_signup WHERE Username='$username1' ";
      $result1=$conn->query($sql);
      if($result1->num_rows >0){

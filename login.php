@@ -27,8 +27,14 @@
 
         if($rememberme==true){
           $cookie_name="randomkey";
-          $cookie_value="key";
+          $randomNumber=rand(1,500);
+          $randomString=md5($username_login);
+          $cookie_value=$randomNumber.$randomString;
           setcookie($cookie_name,$cookie_value, time()+(86400*10),"/");
+          $sql2="UPDATE rhea_signup SET cookies=$cookie_value WHERE Username='$username_login' ";
+          if($conn->query($sql2)===TRUE){
+                     echo 'cookie set';
+          } 
         } 
 
         $sql="SELECT  ID FROM rhea_signup WHERE  Username='$username_login' and Password='$hashPassword' ";
@@ -37,9 +43,11 @@
 
         $count= mysqli_num_rows($result);
 
+
         if($count==1){
           $_SESSION['login_user']=$username_login;
           header('Location: CompleteProfile.php');
+          exit();
         }else{
            $Error="invalid username or password";
         }

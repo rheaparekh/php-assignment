@@ -6,12 +6,22 @@
 </head>
 <body class="background-color">
 
-<?php 
+<?php
+include 'gitIgnore.php';
 include 'session.php';
 include 'cookie.php';
-include 'gitIgnore.php';
 $branch=$college=$bio=$interests=$branchErr=$collegeErr=$bioErr=$interestsErr="" ;
 $username1=$_SESSION['login_user'];
+if($username1==NULL){
+     $sql2="SELECT from rhea_signup Username  WHERE cookies=$cookie_value";
+     $result2=$conn->query($sql2);
+     if($result2->num_rows >0){
+         while($row=$result2->fetch_assoc()){
+           $username1=$row["Username"];
+        }
+     }
+}
+
 $sql="SELECT ProfileID FROM rhea_profile WHERE  username='$username1' ";
 
 

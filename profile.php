@@ -10,6 +10,16 @@
   include 'session.php' ;
   include 'cookie.php';
   $username1=$_SESSION['login_user'];
+  if($username1==NULL){
+      $sql2="SELECT from rhea_signup Username  WHERE cookies=$cookie_value";
+      $result2=$conn->query($sql2);
+      if($result2->num_rows >0){
+        while($row=$result2->fetch_assoc()){
+           $username1=$row["Username"];
+       }
+     }
+  }
+
   
   $sql="SELECT name,Gender,Email FROM rhea_signup WHERE Username='$username1' ";
   $result1=$conn->query($sql);
